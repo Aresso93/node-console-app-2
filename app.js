@@ -32,10 +32,10 @@ function writeData(url, data) {
 
 function transFormData(rows) {
   const header = rows.shift();
-  console.log('header: ' + header + ' ' + typeof header);
+  //console.log('header: ' + header + ' ' + typeof header);
 
   const headerArray = header.split(',');
-  console.log('headerArray: ' + headerArray + ' ' + typeof headerArray);
+  //console.log('headerArray: ' + headerArray + ' ' + typeof headerArray);
 
   let students = [];
 
@@ -45,7 +45,7 @@ function transFormData(rows) {
 
     let student = {};
 
-    console.log('rowArray: ' + rowArray[1] + ' ' + typeof rowArray);
+    //console.log('rowArray: ' + rowArray[1] + ' ' + typeof rowArray);
 
     for (let j = 0; j < headerArray.length; j++) {
       const property = headerArray[j];
