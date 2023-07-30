@@ -37,13 +37,21 @@ function transFormData(rows) {
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
-    const rowArray = row.split(',');
 
+    // Skip empty or whitespace-only rows
+    if (!row.trim()) {
+      continue;
+    }
+
+    const rowArray = row.split(',');
     let student = {};
 
     for (let j = 0; j < headerArray.length; j++) {
       const property = headerArray[j];
       let value = rowArray[j];
+
+      // Remove leading and trailing spaces from the value
+      value = value.trim();
 
       // Convert yob to a number
       if (property === 'yob') {
@@ -52,7 +60,11 @@ function transFormData(rows) {
 
       // Convert isMarried to a boolean
       if (property === 'isMarried') {
-        value = value.toLowerCase() === 'true';
+        if (value === 'true' || value === 'false') {
+          value = value.toLowerCase() === 'true';
+        } else {
+          console.error('Invalid value for isMarried: ' + value);
+        }
       }
 
       student[property] = value;
