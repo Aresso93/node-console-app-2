@@ -32,11 +32,7 @@ function writeData(url, data) {
 
 function transFormData(rows) {
   const header = rows.shift();
-  //console.log('header: ' + header + ' ' + typeof header);
-
   const headerArray = header.split(',');
-  //console.log('headerArray: ' + headerArray + ' ' + typeof headerArray);
-
   let students = [];
 
   for (let i = 0; i < rows.length; i++) {
@@ -45,21 +41,29 @@ function transFormData(rows) {
 
     let student = {};
 
-    //console.log('rowArray: ' + rowArray[1] + ' ' + typeof rowArray);
-
     for (let j = 0; j < headerArray.length; j++) {
       const property = headerArray[j];
-      const value = rowArray[j];
+      let value = rowArray[j];
+
+      // Convert yob to a number
+      if (property === 'yob') {
+        value = parseInt(value, 10);
+      }
+
+      // Convert isMarried to a boolean
+      if (property === 'isMarried') {
+        value = value.toLowerCase() === 'true';
+      }
 
       student[property] = value;
     }
 
     students.push(student);
   }
-  console.log(students);
+
   return JSON.stringify(students);
-  
 }
+
 
 
 
