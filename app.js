@@ -1,13 +1,46 @@
 const fs = require('fs');
+//const transformFromCSVToJSON = require('./json-converter');
+//const transformFromJSONToCSV = require('./csv-converter')
 
 const inputUrl = process.argv[2];
+const splittedInputUrl = inputUrl.split('.');
+const ext = splittedInputUrl[splittedInputUrl.length - 1]  
+//questa è l'estensione, ovvero la stringa dell'input splittata all'ultimo punto. Poi abbiamo preso l'ultimo elemento di quell'array, per questo il -1
+
+let transformFunction;
+
+if (ext.toLowerCase().includes('json')) {
+  
+  transformFunction = require('./csv-converter')
+
+  //checkiamo che nessuno abbia scritto l'estensione maiuscola per sbaglio
+} else if (ext.toLowerCase().includes('csv')){  
+
+  transformFunction = require('./json-converter');
+
+} else {
+
+  console.log('Estensione non valida. Non posso convertire i file ' + ext);
+  process.exit();
+
+}
+
 const outputUrl = process.argv[3];
+
+let divider = process.argv[4];
+if (divider === undefined) {
+  divider = ',';
+}
+
+
+
+console.log(divider);
 
 let data = readFile(inputUrl);
 
 if (data) {
-  const rows = data.split(/\r?\n/);
-  const result = transFormData(rows);
+
+  const result = transformFunction(data, divider);
 
   writeData(outputUrl, result);
 }
@@ -30,87 +63,4 @@ function writeData(url, data) {
   }
 }
 
-function transFormData(rows) {
-  const header = rows.shift();
-  const headerArray = header.split(',');
-  let students = [];
 
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-
-    // Skip empty or whitespace-only rows
-    if (!row.trim()) {
-      continue;
-    }
-
-    const rowArray = row.split(',');
-    let student = {};
-
-    for (let j = 0; j < headerArray.length; j++) {
-      const property = headerArray[j];
-      let value = rowArray[j];
-
-      // Remove leading and trailing spaces from the value
-      value = value.trim();
-
-      // Convert yob to a number
-      if (property === 'yob') {
-        value = parseInt(value, 10);
-      }
-
-      // Convert isMarried to a boolean
-      if (property === 'isMarried') {
-        if (value === 'true' || value === 'false') {
-          value = value.toLowerCase() === 'true';
-        } else {
-          console.error('Invalid value for isMarried: ' + value);
-        }
-      }
-
-      student[property] = value;
-    }
-
-    students.push(student);
-  }
-
-  return JSON.stringify(students);
-}
-
-
-
-
-
-    //A1)tipizzare i valori nel json
-    //A2)aggiungere un parametro alla applicazione che mi permette di indicare il carattere divisorio
-    //A3)gestire la possibilità che nel csv ci siano degli spazi non voluti 
-
-    //console.log('rows: ' + rows);
-
-
-    
-
-
-//FATTO
-
-    //1) creare una costante 'header' con la prima riga che avrete tolto a rows
-    //fare la funzione che toglie il primo elemento dall'array
-
-    //FATTO
-
-    //2) create una costante 'headerArray' splittando la stringa header sulle virgole;
-    //un array di stringhe separate da virgole, quindi
-
-    //FATTO
-
-    //3) create un array temporaneo chiamato students (vuoto);
-
-    //FATTO
-
-    //4) ciclate sull'array rows;
-        //4a) create una costante rowArray splittando la singola row sulle virgole;
-        //4b) create un oggetto vuoto chiamato student;
-        //4c) ciclate sull'headerArray;
-            //4c1) per ogni elemento dell'headerArray aggiungo una proprietà all'oggetto student
-                // student[headerArray[j]] = rowArray[j];
-        //4d) aggiungo student a students
-    //5) ritorno JSON.stringify di students

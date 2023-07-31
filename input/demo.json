@@ -1,0 +1,26 @@
+[
+    {
+        "title" : "Steve and Morty",
+        "author" : "Steve",
+        "year" : 2010,
+        "rating" : "positive"
+    },
+    {
+        "title" : "Steving Bad",
+        "author" : "Steve Stevenson",
+        "year" : 2011,
+        "rating" : "negative"
+    },
+    {
+        "title" : "Steve",
+        "author" : "Stephen Stephenson",
+        "year" : 2012,
+        "rating" : "positive"
+    },
+    {
+        "title" : "Strappare lungo gli Steve",
+        "author" : "Steven Steven",
+        "year" : 2013,
+        "rating" : "negative"
+    }
+]
